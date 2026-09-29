@@ -1,0 +1,6 @@
+@GeoMac.Presentation_HostAddress = http://localhost:5235
+
+GET {{GeoMac.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

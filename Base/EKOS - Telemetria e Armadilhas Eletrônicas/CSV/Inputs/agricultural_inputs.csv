@@ -1,0 +1,5 @@
+id_agricultural_input;agricultural_input_number;agricultural_input_name;agricultural_input_brand;agricultural_input_class;agricultural_input_unit;agricultural_input_enable;agricultural_input_family;agricultural_input_group;__typename
+6997;1;CALCÁRIO;GUAPIARA;DOLOMITICO;MEASURE_UNIT_KILOGRAM;True;;CORRETIVO DE SOLO;AgriculturalInput
+7459;3;DKB358PRO4;;Sementes;MEASURE_UNIT_KILOGRAM;True;;;AgriculturalInput
+6998;2;GESSO;NUTRION;CLASSE B;MEASURE_UNIT_KILOGRAM;True;;;AgriculturalInput
+7460;4;NK501VIP3;;Sementes;MEASURE_UNIT_KILOGRAM;True;;;AgriculturalInput

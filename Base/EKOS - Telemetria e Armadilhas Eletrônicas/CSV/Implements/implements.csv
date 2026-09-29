@@ -1,0 +1,5 @@
+implementNumber;implementName;implementEnable;implementModelName;implementModelNumber;implementType_implementTypeName;implementType_implementTypeEnum;implementApSystem_implementApSystemEnum
+2;Adubadora;True;Adubadora JFDOUBLE DISC 13;12;ADUBADOR;TRACTOR_IMPLEMENT_FERTILIZER;IMPLEMENT_GENERIC_FERTILIZER
+5;Advance 3000 Am18;True;Pulverizador;5;PULVERIZADOR;TRACTOR_IMPLEMENT_SPRAYER;IMPLEMENT_GENERIC_SPRAYER
+1;Tellus 10000 NPK;True;Tellus 10000 NPK;1;ADUBADOR;TRACTOR_IMPLEMENT_FERTILIZER;IMPLEMENT_OTHER
+10;Meridia;True;Meridia;10;PLANTADEIRA;TRACTOR_IMPLEMENT_PLANTER;IMPLEMENT_PLANTER_JACTO_MERIDIA
