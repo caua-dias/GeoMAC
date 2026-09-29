@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoMAC | Dashboard de Análises</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <i class="fa-solid fa-leaf"></i>
+        <span>GeoMAC</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Painel</div>
+      <a href="#" class="nav-item active" data-page="overview">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Visão Geral</span>
+      </a>
+
+      <div class="nav-section-title">Análises</div>
+      <a href="#" class="nav-item" data-page="ndvi">
+        <i class="fa-solid fa-satellite"></i>
+        <span>NDVI / Vigor</span>
+      </a>
+      <a href="#" class="nav-item" data-page="weather">
+        <i class="fa-solid fa-cloud-sun-rain"></i>
+        <span>Clima</span>
+      </a>
+      <a href="#" class="nav-item" data-page="soil">
+        <i class="fa-solid fa-flask"></i>
+        <span>Solo</span>
+      </a>
+      <a href="#" class="nav-item" data-page="actions">
+        <i class="fa-solid fa-route"></i>
+        <span>Plano de Ação</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="user-details">
+          <span class="user-name" id="userName">Usuário</span>
+          <span class="user-role">Analista</span>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Sair">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fa-solid fa-bars"></i></button>
+        <h1 id="pageTitle">Visão Geral</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-badge">
+          <i class="fa-solid fa-seedling"></i>
+          <span>Safra 2025/2026 — Grão 4.0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================== -->
+    <!-- PAGE: OVERVIEW -->
+    <!-- ============================================== -->
+    <div class="page active" id="page-overview">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap amber"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-value">35.9°C</div>
+            <div class="kpi-label">Pico Térmico (Estádio Reprodutivo)</div>
+          </div>
+          <div class="kpi-trend critical"><i class="fa-solid fa-arrow-up"></i> Crítico</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap red"><i class="fa-solid fa-droplet-slash"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-value">0.0 mm</div>
+            <div class="kpi-label">Precipitação — Semana 7 (VT/R1)</div>
+          </div>
+          <div class="kpi-trend critical"><i class="fa-solid fa-triangle-exclamation"></i> Sem chuva</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap blue"><i class="fa-solid fa-flask"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-value">4.65</div>
+            <div class="kpi-label">pH Mínimo (Fator Restritivo)</div>
+          </div>
+          <div class="kpi-trend warning"><i class="fa-solid fa-arrow-down"></i> Abaixo ideal</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap green"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-value">0.827</div>
+            <div class="kpi-label">NDVI Pico (16/Jan)</div>
+          </div>
+          <div class="kpi-trend ok"><i class="fa-solid fa-check"></i> Adequado</div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <div class="glass-card overview-chart">
+          <h3><i class="fa-solid fa-chart-area" style="color:var(--green-400)"></i> Evolução NDVI (Resumo)</h3>
+          <div class="chart-wrapper"><canvas id="overviewNdvi"></canvas></div>
+        </div>
+        <div class="glass-card overview-chart">
+          <h3><i class="fa-solid fa-cloud-rain" style="color:var(--blue-400)"></i> Precipitação vs Temperatura</h3>
+          <div class="chart-wrapper"><canvas id="overviewMeteo"></canvas></div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="margin-top:24px;">
+        <h3><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--amber-400)"></i> Resumo do Diagnóstico</h3>
+        <p style="margin-bottom:20px;font-size:0.95rem;">A quebra de produtividade no talhão Grão 4.0 resulta da intersecção de múltiplos fatores limitantes, classificados em <strong style="color:var(--blue-400)">edafoclimáticos</strong>, <strong style="color:var(--amber-400)">edafológicos</strong> e <strong style="color:var(--red-400)">operacionais</strong>.</p>
+        <div class="diagnosis-summary">
+          <div class="diag-mini clima">
+            <i class="fa-solid fa-sun"></i>
+            <div><strong>Risco Agrometeorológico</strong><span>Déficit hídrico e estresse térmico severo no pendoamento</span></div>
+          </div>
+          <div class="diag-mini solo">
+            <i class="fa-solid fa-mound"></i>
+            <div><strong>Limitação Edafológica</strong><span>pH 4.65 e toxicidade por Alumínio (1.48 cmol)</span></div>
+          </div>
+          <div class="diag-mini manejo">
+            <i class="fa-solid fa-tractor"></i>
+            <div><strong>Vulnerabilidade Operacional</strong><span>Falhas de rastreabilidade e omissão de danos</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- PAGE: NDVI -->
+    <!-- ============================================== -->
+    <div class="page" id="page-ndvi">
+      <div class="page-header">
+        <div class="section-label"><i class="fa-solid fa-satellite"></i> Dinâmica do Vigor Vegetativo</div>
+        <h2>Avaliação do Índice NDVI ao Longo do Ciclo</h2>
+        <p class="page-desc">O estabelecimento da cultura ocorreu em 04 de Novembro de 2025. O índice NDVI apresentou evolução coerente com o acúmulo de fitomassa, atingindo pico de 0.82 em meados de janeiro. O decréscimo abrupto subsequente (redução para 0.50) indica senescência precoce e provável abortamento foliar e reprodutivo, induzidos por severas condições de estresse hídrico e térmico durante o estádio de pendoamento.</p>
+      </div>
+
+      <div class="glass-card" style="margin-bottom:24px;">
+        <h3><i class="fa-solid fa-chart-area" style="color:var(--green-400)"></i> Curva de Resposta NDVI (Comparativo de Manejo)</h3>
+        <div class="chart-wrapper chart-lg"><canvas id="chartNdvi"></canvas></div>
+      </div>
+
+      <div class="ndvi-insights">
+        <div class="glass-card insight">
+          <div class="insight-icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+          <h4>Colapso Vegetativo</h4>
+          <p>Queda de <strong>38.7%</strong> no NDVI entre o pico (0.827) e a colheita (0.507), indicando senescência precoce induzida por estresse.</p>
+        </div>
+        <div class="glass-card insight">
+          <div class="insight-icon amber"><i class="fa-solid fa-calendar-xmark"></i></div>
+          <h4>Período Crítico</h4>
+          <p>A divergência entre Grão 4.0 e convencional acentua-se a partir do <strong>pendoamento (27/Dez)</strong>, coincidindo com o pico térmico.</p>
+        </div>
+        <div class="glass-card insight">
+          <div class="insight-icon blue"><i class="fa-solid fa-circle-info"></i></div>
+          <h4>Comparativo</h4>
+          <p>O grão convencional manteve NDVI de <strong>0.710</strong> no mesmo período, demonstrando maior resiliência ao estresse hídrico-térmico.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- PAGE: WEATHER -->
+    <!-- ============================================== -->
+    <div class="page" id="page-weather">
+      <div class="page-header">
+        <div class="section-label"><i class="fa-solid fa-cloud-sun-rain"></i> Análise Agrometeorológica</div>
+        <h2>Distribuição Pluviométrica e Térmica no Ciclo</h2>
+        <p class="page-desc">A análise meteorológica semanal revela a ocorrência de um veranico severo durante as semanas 7 e 8 do ciclo fenológico, exatamente sobre o estádio de pendoamento e florescimento, resultando em estresse hídrico-térmico combinado com temperaturas superiores a 35°C.</p>
+      </div>
+
+      <div class="glass-card" style="margin-bottom:24px;">
+        <h3><i class="fa-solid fa-cloud-rain" style="color:var(--blue-400)"></i> Precipitação (mm) vs Temperatura Máxima (°C)</h3>
+        <div class="chart-wrapper chart-lg"><canvas id="chartMeteo"></canvas></div>
+      </div>
+
+      <div class="weather-cards">
+        <div class="glass-card weather-detail">
+          <div class="wd-icon"><i class="fa-solid fa-droplet" style="color:var(--blue-400)"></i></div>
+          <h4>Déficit Hídrico</h4>
+          <div class="wd-value red">0.0 mm</div>
+          <p>Na semana 7 (VT/R1), período mais crítico para a definição de grãos por espiga.</p>
+        </div>
+        <div class="glass-card weather-detail">
+          <div class="wd-icon"><i class="fa-solid fa-temperature-high" style="color:var(--red-400)"></i></div>
+          <h4>Estresse Térmico</h4>
+          <div class="wd-value amber">35.9°C</div>
+          <p>Temperatura máxima na semana 8, culminando em inviabilidade polínica.</p>
+        </div>
+        <div class="glass-card weather-detail">
+          <div class="wd-icon"><i class="fa-solid fa-water" style="color:var(--cyan-400)"></i></div>
+          <h4>Excesso Concentrado</h4>
+          <div class="wd-value blue">271.8 mm</div>
+          <p>Precipitação na semana 6 (Dez), mostrando distribuição irregular e concentrada.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- PAGE: SOIL -->
+    <!-- ============================================== -->
+    <div class="page" id="page-soil">
+      <div class="page-header">
+        <div class="section-label"><i class="fa-solid fa-flask"></i> Diagnóstico Edafológico</div>
+        <h2>Avaliação de Atributos Químicos do Solo</h2>
+        <p class="page-desc">A análise de solo em amostras representativas revelou heterogeneidade significativa nos atributos químicos do talhão. As zonas problemáticas apresentam acidez elevada (pH 4.65), toxicidade por alumínio e baixo teor de matéria orgânica — fatores que restringem severamente o sistema radicular.</p>
+      </div>
+
+      <div class="glass-card" style="margin-bottom:24px;">
+        <h3><i class="fa-solid fa-flask" style="color:var(--amber-400)"></i> Comparativo de Atributos Químicos (Radar)</h3>
+        <div class="chart-wrapper chart-lg"><canvas id="chartSoil"></canvas></div>
+      </div>
+
+      <div class="soil-table-wrapper glass-card">
+        <h3><i class="fa-solid fa-table" style="color:var(--cyan-400)"></i> Tabela Comparativa de Amostras</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Zona Saudável</th>
+              <th>Zona Problemática</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>pH (CaCl2)</td>
+              <td>6.30</td>
+              <td>4.65</td>
+              <td><span class="status-badge critical">Crítico</span></td>
+            </tr>
+            <tr>
+              <td>Saturação por Bases (%)</td>
+              <td>79%</td>
+              <td>47%</td>
+              <td><span class="status-badge warning">Alerta</span></td>
+            </tr>
+            <tr>
+              <td>Fósforo (mg/dm³)</td>
+              <td>13.2</td>
+              <td>18.9</td>
+              <td><span class="status-badge ok">Adequado</span></td>
+            </tr>
+            <tr>
+              <td>Alumínio Trocável (cmol)</td>
+              <td>0.00</td>
+              <td>1.48</td>
+              <td><span class="status-badge critical">Tóxico</span></td>
+            </tr>
+            <tr>
+              <td>Matéria Orgânica (%)</td>
+              <td>8.5%</td>
+              <td>5.0%</td>
+              <td><span class="status-badge warning">Baixo</span></td>
+            </tr>
+            <tr>
+              <td>Argila (%)</td>
+              <td>12%</td>
+              <td>14%</td>
+              <td><span class="status-badge ok">Normal</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- PAGE: ACTION PLANS -->
+    <!-- ============================================== -->
+    <div class="page" id="page-actions">
+      <div class="page-header">
+        <div class="section-label"><i class="fa-solid fa-route"></i> Proposições de Manejo</div>
+        <h2>Diretrizes Técnicas para a Safra Subsequente</h2>
+        <p class="page-desc">A mitigação dos riscos identificados requer um planejamento integrado focado na construção da fertilidade do perfil do solo, ajuste de biotecnologia/genética e adoção rigorosa de protocolos operacionais.</p>
+      </div>
+
+      <!-- Priority 1 -->
+      <div class="priority-section">
+        <div class="priority-header">
+          <span class="priority-badge high">Manejo Primário</span>
+          <h3>Correção Edafológica e Estrutural</h3>
+        </div>
+        <div class="actions-grid">
+          <div class="glass-card action-card">
+            <i class="fa-solid fa-spray-can action-icon" style="color:var(--red-400)"></i>
+            <h4>1. Correção a Taxa Variável</h4>
+            <span class="action-tag soil">Fertilidade Plena</span>
+            <p>Implementar calagem e gessagem localizadas utilizando os polígonos de NDVI histórico em cruzamento com as amostras químicas. <strong>Objetivo Técnico:</strong> Neutralizar a saturação por Alumínio em profundidade para induzir um sistema radicular pivotante e volumoso.</p>
+          </div>
+          <div class="glass-card action-card">
+            <i class="fa-solid fa-leaf action-icon" style="color:var(--red-400)"></i>
+            <h4>2. Inserção de Plantas de Cobertura</h4>
+            <span class="action-tag water">Física do Solo</span>
+            <p>Obrigatório o cultivo de gramíneas (ex: Urochloa) na entressafra para formação contínua de palhada, fundamental para a conservação de umidade e elevação gradual do teor de Matéria Orgânica nas manchas arenosas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority 2 -->
+      <div class="priority-section">
+        <div class="priority-header">
+          <span class="priority-badge medium">Manejo Genético</span>
+          <h3>Ajuste Fitotécnico</h3>
+        </div>
+        <div class="actions-grid">
+          <div class="glass-card action-card">
+            <i class="fa-solid fa-dna action-icon" style="color:var(--amber-400)"></i>
+            <h4>3. Adaptação do Híbrido</h4>
+            <span class="action-tag seed">Genética Rústica</span>
+            <p>O híbrido DKB358PRO4 apresentou alta responsividade a estresses ambientais em solo arenoso. Recomenda-se a avaliação de híbridos com maior estabilidade fenotípica (tolerância à seca) e adequação da densidade de semeadura.</p>
+          </div>
+          <div class="glass-card action-card">
+            <i class="fa-solid fa-faucet-drip action-icon" style="color:var(--amber-400)"></i>
+            <h4>4. Viabilidade de Irrigação de Resgate</h4>
+            <span class="action-tag water">Infraestrutura</span>
+            <p>Estudo financeiro e agronômico para implementação de sistemas de irrigação suplementar direcionada, minimizando o impacto econômico de veranicos severos registrados durante o estádio reprodutivo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority 3 -->
+      <div class="priority-section">
+        <div class="priority-header">
+          <span class="priority-badge low">Gestão e Sustentabilidade</span>
+          <h3>Controle Fitossanitário e Governança de Dados</h3>
+        </div>
+        <div class="glass-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Criticidade</th>
+                <th>Proposição de Melhoria</th>
+                <th>Área de Atuação</th>
+                <th>Prazo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-badge critical">Alta</span></td>
+                <td><strong>Manejo de Fauna Silvestre:</strong> Dimensionamento e instalação de barreiras físicas ou cercas elétricas móveis nas faixas de transição e bordaduras.</td>
+                <td>Prevenção Contínua</td>
+                <td>Pré-Plantio</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge warning">Média</span></td>
+                <td><strong>Governança de Dados (Sistema EKOS):</strong> Treinamento mandatório para operadores. Ordens de Serviço devem ter preenchimento rigoroso de doses, defensivos e apontamento de ocorrências.</td>
+                <td>Treinamento Técnico</td>
+                <td>Imediato</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

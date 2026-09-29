@@ -1,0 +1,15 @@
+C:\Estudio\Fabrica de projeto\GeoMac.Application\bin\Debug\net10.0\GeoMac.Application.deps.json
+C:\Estudio\Fabrica de projeto\GeoMac.Application\bin\Debug\net10.0\GeoMac.Application.dll
+C:\Estudio\Fabrica de projeto\GeoMac.Application\bin\Debug\net10.0\GeoMac.Application.pdb
+C:\Estudio\Fabrica de projeto\GeoMac.Application\bin\Debug\net10.0\GeoMac.Domain.dll
+C:\Estudio\Fabrica de projeto\GeoMac.Application\bin\Debug\net10.0\GeoMac.Domain.pdb
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.csproj.AssemblyReference.cache
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.AssemblyInfoInputs.cache
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.AssemblyInfo.cs
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.csproj.CoreCompileInputs.cache
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.A.DC24EFCC.Up2Date
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.dll
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\refint\GeoMac.Application.dll
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\GeoMac.Application.pdb
+C:\Estudio\Fabrica de projeto\GeoMac.Application\obj\Debug\net10.0\ref\GeoMac.Application.dll

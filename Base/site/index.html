@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoMAC | Análise Integrada de Quebra de Safra</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+
+  <!-- NAVEGAÇÃO -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <i class="fa-solid fa-leaf"></i>
+        <span>GeoMAC</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#overview">Análise Espaço-Temporal</a></li>
+        <li><a href="#diagnostico">Matriz de Risco</a></li>
+        <li><a href="#plano">Proposições de Manejo</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-microscope"></i> Análise Diagnóstica Integrada
+      </div>
+      <h1>Diagnóstico de Quebra de Produtividade:<br><span>Fatores Limitantes no Grão 4.0</span></h1>
+      <p class="hero-subtitle">
+        Avaliação exaustiva do ciclo fenológico (Nov/2025 - Fev/2026), correlacionando índices de vegetação (NDVI), anomalias agrometeorológicas, atributos químicos do solo e registros operacionais de precisão.
+      </p>
+      
+      <!-- KPIs -->
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="color: var(--amber-400)"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+          <div class="kpi-value amber">35.9°C</div>
+          <div class="kpi-label">Pico Térmico (Estádio Reprodutivo)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="color: var(--red-400)"><i class="fa-solid fa-droplet-slash"></i></div>
+          <div class="kpi-value red">0.0 mm</div>
+          <div class="kpi-label">Precipitação - Semanas 7 (VT/R1)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="color: var(--blue-400)"><i class="fa-solid fa-flask"></i></div>
+          <div class="kpi-value blue">4.65</div>
+          <div class="kpi-label">pH Mínimo (Fator Restritivo)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISÃO GERAL NDVI -->
+  <section id="overview" class="container reveal">
+    <div class="section-label"><i class="fa-solid fa-satellite"></i> Dinâmica do Vigor Vegetativo</div>
+    <h2>Avaliação do Índice NDVI ao Longo do Ciclo</h2>
+    <p class="section-desc">
+      O estabelecimento da cultura ocorreu em 04 de Novembro de 2025. O índice NDVI apresentou evolução coerente com o acúmulo de fitomassa, atingindo pico de 0.82 em meados de janeiro. O decréscimo abrupto subsequente (redução para 0.50) indica senescência precoce e provável abortamento foliar e reprodutivo, induzidos por severas condições de estresse hídrico e térmico durante o estádio de pendoamento.
+    </p>
+    
+    <div class="glass-card mb-large">
+      <h3><i class="fa-solid fa-chart-area" style="color: var(--green-400)"></i> Curva de Resposta NDVI (Comparativo de Manejo)</h3>
+      <div class="chart-wrapper" style="height: 400px;">
+        <canvas id="chartNdvi"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAGNÓSTICO REAVALIADO -->
+  <section id="diagnostico" class="container reveal" style="padding-top: 40px;">
+    <div class="section-label"><i class="fa-solid fa-magnifying-glass-chart"></i> Matriz de Diagnóstico</div>
+    <h2>Consolidação dos Fatores de Estresse</h2>
+    <p class="section-desc">
+      A quebra de produtividade no talhão Grão 4.0 não se deve a um evento isolado, mas à intersecção de múltiplos fatores limitantes, classificados a seguir em edafoclimáticos, fitossanitários e operacionais.
+    </p>
+
+    <div class="diagnosis-grid">
+      <!-- Fator Clima -->
+      <div class="diag-card clima">
+        <div class="diag-icon" style="color: var(--blue-400)"><i class="fa-solid fa-sun"></i></div>
+        <h3 style="color: var(--blue-400)">Risco Agrometeorológico</h3>
+        <ul>
+          <li><strong>Déficit Hídrico Crítico:</strong> Registro pluviométrico de apenas 16.8 mm num intervalo de 14 dias coincidentes com o período de florescimento e pendoamento.</li>
+          <li><strong>Estresse Térmico Acumulado:</strong> Temperaturas diurnas atingindo 35.9°C no mesmo período, culminando em inviabilidade polínica e redução drástica no número de grãos por espiga.</li>
+        </ul>
+      </div>
+
+      <!-- Fator Solo -->
+      <div class="diag-card solo">
+        <div class="diag-icon" style="color: var(--amber-400)"><i class="fa-solid fa-mound"></i></div>
+        <h3 style="color: var(--amber-400)">Limitação Edafológica</h3>
+        <ul>
+          <li><strong>Restrição Física e Química:</strong> Áreas com textura altamente arenosa associadas a acidez elevada (pH em CaCl2 atingindo 4.65 nas amostras críticas).</li>
+          <li><strong>Toxicidade por Alumínio:</strong> Níveis deletérios de Alumínio trocável (1.48 cmol), restringindo a elongação do sistema radicular e inviabilizando a absorção de água em horizontes mais profundos durante o período de estiagem.</li>
+        </ul>
+      </div>
+
+      <!-- Fator Manejo & Operacional -->
+      <div class="diag-card manejo">
+        <div class="diag-icon" style="color: var(--red-400)"><i class="fa-solid fa-tractor"></i></div>
+        <h3 style="color: var(--red-400)">Vulnerabilidade Operacional</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">O monitoramento do sistema de gestão EKOS revelou inconsistências no fluxo de informações agronômicas essenciais:</p>
+        <ul style="margin-left: 0; padding-left: 0;">
+          <li><strong>Rastreabilidade de Defensivos:</strong> As Ordens de Serviço registram aplicações de "Inseticida+Foliar", entretanto, não há o apontamento formal das moléculas ou princípios ativos utilizados no módulo de Insumos, comprometendo o histórico de manejo.</li>
+          <li><strong>Omissão de Danos por Fauna e Pragas:</strong> Relatos in-loco de danos significativos na bordadura decorrentes da ação de capivaras (fauna silvestre) e infestações secundárias de pragas não constam nos registros oficiais de monitoramento (módulo Traps), inviabilizando o controle tático.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Gráficos de Suporte -->
+    <div class="charts-grid-2" style="margin-top: 32px;">
+      <div class="glass-card">
+        <h3><i class="fa-solid fa-flask" style="color: var(--amber-400)"></i> Avaliação de Atributos Químicos (Amostras Específicas)</h3>
+        <div class="chart-wrapper" style="height: 300px;">
+          <canvas id="chartSoil"></canvas>
+        </div>
+      </div>
+      <div class="glass-card">
+        <h3><i class="fa-solid fa-cloud-rain" style="color: var(--blue-400)"></i> Distribuição Pluviométrica e Térmica</h3>
+        <div class="chart-wrapper" style="height: 300px;">
+          <canvas id="chartMeteo"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANO DE AÇÃO (O COMO MELHORAR) -->
+  <section id="plano" class="improvement-section" style="padding-top: 60px;">
+    <div class="container reveal">
+      <div class="section-label"><i class="fa-solid fa-route"></i> Proposições de Manejo</div>
+      <h2>Diretrizes Técnicas para a Safra Subsequente</h2>
+      <p class="section-desc">
+        A mitigação dos riscos identificados requer um planejamento integrado focado na construção da fertilidade do perfil do solo, ajuste de biotecnologia/genética e adoção rigorosa de protocolos operacionais.
+      </p>
+
+      <!-- Prioridade Alta -->
+      <div class="priority-group">
+        <div class="priority-header">
+          <span class="priority-badge high">Manejo Primário</span>
+          <h3>Correção Edafológica e Estrutural</h3>
+        </div>
+        <div class="actions-grid">
+          <div class="action-card">
+            <i class="fa-solid fa-spray-can action-icon" style="color: var(--red-400)"></i>
+            <h4>1. Correção a Taxa Variável</h4>
+            <span class="action-tag soil">Fertilidade Plena</span>
+            <p>Implementar calagem e gessagem localizadas utilizando os polígonos de NDVI histórico em cruzamento com as amostras químicas (especialmente 2 e 3). <strong>Objetivo Técnico:</strong> Neutralizar a saturação por Alumínio em profundidade para induzir um sistema radicular pivotante e volumoso.</p>
+          </div>
+          <div class="action-card">
+            <i class="fa-solid fa-leaf action-icon" style="color: var(--red-400)"></i>
+            <h4>2. Inserção de Plantas de Cobertura</h4>
+            <span class="action-tag water">Física do Solo</span>
+            <p>Obrigatório o cultivo de gramíneas (ex: Urochloa) na entressafra para formação contínua de palhada, fundamental para a conservação de umidade e elevação gradual do teor de Matéria Orgânica nas manchas arenosas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prioridade Média -->
+      <div class="priority-group">
+        <div class="priority-header">
+          <span class="priority-badge medium">Manejo Genético</span>
+          <h3>Ajuste Fitotécnico</h3>
+        </div>
+        <div class="actions-grid">
+          <div class="action-card">
+            <i class="fa-solid fa-dna action-icon" style="color: var(--amber-400)"></i>
+            <h4>3. Adaptação do Híbrido</h4>
+            <span class="action-tag seed">Genética Rústica</span>
+            <p>O híbrido DKB358PRO4 apresentou alta responsividade a estresses ambientais em solo arenoso. Recomenda-se a avaliação de híbridos com maior estabilidade fenotípica (tolerância à seca) e adequação da densidade de semeadura nas zonas de menor vigor histórico.</p>
+          </div>
+          <div class="action-card">
+            <i class="fa-solid fa-faucet-drip action-icon" style="color: var(--amber-400)"></i>
+            <h4>4. Viabilidade de Irrigação de Resgate</h4>
+            <span class="action-tag water">Infraestrutura</span>
+            <p>Estudo financeiro e agronômico para implementação de sistemas de irrigação suplementar direcionada, minimizando o impacto econômico de veranicos severos registrados durante o estádio reprodutivo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prioridade Baixa/Operacional -->
+      <div class="priority-group">
+        <div class="priority-header">
+          <span class="priority-badge low">Gestão e Sustentabilidade</span>
+          <h3>Controle Fitossanitário e Governança de Dados</h3>
+        </div>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Criticidade</th>
+              <th>Proposição de Melhoria</th>
+              <th>Área de Atuação</th>
+              <th>Prazo de Implantação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status-dot critical"></span></td>
+              <td><strong>Manejo de Fauna Silvestre:</strong> Dimensionamento e instalação de barreiras físicas ou cercas elétricas móveis nas faixas de transição e bordaduras, evitando dano por capivaras nas zonas limítrofes.</td>
+              <td>Prevenção Contínua</td>
+              <td>Pré-Plantio</td>
+            </tr>
+            <tr>
+              <td><span class="status-dot warning"></span></td>
+              <td><strong>Governança de Dados (Sistema EKOS):</strong> Realização de treinamento mandatório para operadores. O encerramento de Ordens de Serviço (OS) deve estar vinculado ao preenchimento rigoroso de doses, defensivos utilizados e apontamento ativo de ocorrências nas armadilhas.</td>
+              <td>Treinamento Técnico</td>
+              <td>Imediato</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>Desenvolvido para o <span>FarmLab</span> | Estudo Acadêmico de Análise Espaço-Temporal e Produtividade</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

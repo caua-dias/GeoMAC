@@ -1,0 +1,4 @@
+idMachine;idBusinessUnit;idOperationalCategory;machineName;machineSerialNumber;machineType;machineModel;machineBrand;machineEnable;machineTransfer;machineERPCode;machineCreatedAt;machineUpdatedAt;machineGPSOffset_internalGPSOffsetX;machineGPSOffset_internalGPSOffsetY;machineGPSOffset_externalGPSOffsetX;machineGPSOffset_externalGPSOffsetY
+130879;53560;;Forage Cruiser FFR500 New Holland;01;MACHINE_TYPE_GRAIN_HARVESTER;MACHINE_MODEL_NEW_HOLLAND_CR_9060;New Holland;True;False;;1770051731;1770051731;0.0;0.0;0.0;0.0
+113547;53560;;Trator John Deere Série 6J - 6166;6166;MACHINE_TYPE_TRACTOR;MACHINE_MODEL_JOHN_DEERE_6J_SERIE;John Deere;True;False;;1755878686;1755878686;0.0;0.0;0.0;0.0
+120418;53560;;Trator Valtra série T - 05;05;MACHINE_TYPE_TRACTOR;MACHINE_MODEL_VALTRA_T;Valtra;True;False;;1761942571;1761942571;0.0;0.0;0.0;0.0
