@@ -1,7 +1,8 @@
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_SPEED.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_STATE.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_TELEMETRY_COMMUNICATION.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_SPEED.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_STATE.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_TELEMETRY_COMMUNICATION.csv
-Base/EKOS - Telemetria e Armadilhas Eletrônicas/CSV/Layers/LAYER_MAP_SCHEDULE.csv
+# Ignorar todas as pastas e arquivos CSV brutos
+**/CSV/
+*.csv
+
+# Ignorar arquivos temporários do Python/Ambiente
+__pycache__/
+*.pyc
+.venv/
