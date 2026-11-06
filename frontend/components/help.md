@@ -1,0 +1,1 @@
+# Componentes globais e reutilizáveis (UI)

@@ -1,0 +1,1 @@
+# Funções utilitárias que usam o estado da biblioteca (Custom Hooks)

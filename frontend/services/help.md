@@ -1,0 +1,1 @@
+# Comunicação direta com o mundo externo (APIs, HTTP)

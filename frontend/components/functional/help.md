@@ -1,0 +1,1 @@
+# Componentes reutilizáveis, mas que possuem contexto do app (ex: UserAvatar, CartItem).

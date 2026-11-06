@@ -1,0 +1,1 @@
+# Componentes atômicos e genéricos que não conhecem o negócio (ex: Button, Input, Modal). Eles podem ser levados para qualquer outro projeto sem quebrar

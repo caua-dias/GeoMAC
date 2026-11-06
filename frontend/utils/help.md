@@ -1,0 +1,1 @@
+# Funções puras de JavaScript/TypeScript para tarefas comuns

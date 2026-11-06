@@ -1,0 +1,1 @@
+# Configurações globais (instâncias de API, rotas, variáveis)

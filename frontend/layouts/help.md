@@ -1,0 +1,1 @@
+  # Estruturas de página repetitivas (Header + Sidebar + Footer)
