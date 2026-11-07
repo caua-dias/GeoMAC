@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta | FarmLab</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth">
+<aside class="auth-aside">
+  <div class="nav-logo" style="font-size:1.2rem"><i class="fa-solid fa-leaf"></i> Farm<span>Lab</span></div>
+  <div>
+    <h2>Entenda o que a lavoura está dizendo.</h2>
+    <p>Acompanhe NDVI, clima e solo de cada talhão em um só painel.</p>
+  </div>
+  <p style="font-size:.8rem;color:var(--text-muted)">Análise espaço-temporal e produtividade</p>
+</aside>
+<main class="auth-main"><div class="auth-box">
+  <h1>Criar conta</h1>
+  <p>Cadastre sua propriedade e comece a monitorar.</p>
+  <form data-form="register" novalidate>
+    <div class="form-msg" role="alert"></div>
+    <div class="field"><label for="name">Nome completo</label><input id="name" name="name" autocomplete="name" placeholder="Maria Souza"><div class="field-error"></div></div>
+    <div class="field"><label for="farm">Propriedade</label><input id="farm" name="farm" placeholder="Fazenda Boa Vista"><div class="field-error"></div></div>
+    <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" placeholder="nome@fazenda.com"><div class="field-error"></div></div>
+    <div class="field"><label for="password">Senha</label>
+      <div class="input-wrap"><input id="password" name="password" type="password" autocomplete="new-password" data-strength placeholder="Mínimo de 8 caracteres"><button type="button" class="toggle-pw" aria-label="Mostrar senha"><i class="fa-solid fa-eye"></i></button></div>
+      <div class="field-error"></div><div class="strength" data-level="0"><i></i><i></i><i></i><i></i></div><div class="strength-text"></div></div>
+    <div class="field"><label for="confirm">Confirmar senha</label>
+      <div class="input-wrap"><input id="confirm" name="confirm" type="password" autocomplete="new-password"  placeholder="Repita a senha"><button type="button" class="toggle-pw" aria-label="Mostrar senha"><i class="fa-solid fa-eye"></i></button></div>
+      <div class="field-error"></div></div>
+    <div class="field"><label class="check"><input type="checkbox" name="terms"> Li e aceito os termos de uso</label><div class="field-error"></div></div>
+    <button class="btn" type="submit">Criar conta</button>
+  </form>
+  <p class="auth-foot">Já tem conta? <a href="login.html">Entrar</a></p>
+</div></main>
+<script src="auth.js"></script>
+</body>
+</html>
