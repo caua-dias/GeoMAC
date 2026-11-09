@@ -1,6 +1,26 @@
 @GeoMac.Presentation_HostAddress = http://localhost:5235
 
-GET {{GeoMac.Presentation_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. Diagnóstico Agronômico Estruturado (JSON) via Qwen 2.5 7B
+POST {{GeoMac.Presentation_HostAddress}}/api/assistant/diagnose
+Content-Type: application/json
 
-###
+{
+  "fieldName": "Grão 4.0",
+  "cropName": "Milho DKB358PRO4",
+  "peakNdvi": 0.827,
+  "finalNdvi": 0.507,
+  "minSoilPh": 4.65,
+  "exchangeableAluminum": 1.48,
+  "reproductiveStagePrecipitationMm": 0.0,
+  "maxTemperatureCelsius": 35.9,
+  "additionalNotes": "Solo arenoso (>84% areia) e danos por capivaras nas bordaduras."
+}
+
+### 2. Chat Livre com o Agrônomo Virtual (Qwen 2.5 7B)
+POST {{GeoMac.Presentation_HostAddress}}/api/assistant/chat
+Content-Type: application/json
+
+{
+  "message": "Qual estratégia de calagem e gessagem você recomenda para neutralizar 1.48 cmol de alumínio em solo arenoso?",
+  "talhaoContext": "Talhão Grão 4.0 (19,3 ha), pH CaCl2 4.65, Saturação por bases 47%"
+}
