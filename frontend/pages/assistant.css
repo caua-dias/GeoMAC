@@ -1,0 +1,810 @@
+/* ==========================================================================
+   GEOMAC / FARMLAB — ASSISTANT STYLES (assistant.css)
+   Baseado no Design System do GeoMAC (Dark Theme + Glassmorphism + Gradients)
+   ========================================================================== */
+
+/* ---- TOGGLE SWITCH: TIPO DE DADOS (PADRÃO DA IMAGEM + PALETA GEOMAC) ---- */
+.data-source-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 24px auto 36px;
+  padding: 16px 24px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  max-width: 780px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+}
+
+.data-source-control:hover {
+  border-color: var(--border-glow);
+}
+
+.data-source-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--green-400);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.data-source-title i {
+  font-size: 0.85rem;
+}
+
+.data-source-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.toggle-side-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.25s ease, font-weight 0.25s ease, transform 0.25s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toggle-side-label.left {
+  text-align: right;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.toggle-side-label.right {
+  text-align: left;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.toggle-side-label:hover {
+  color: var(--text-primary);
+}
+
+.toggle-side-label.active {
+  color: var(--green-400);
+  font-weight: 700;
+  transform: scale(1.02);
+}
+
+.toggle-side-label.active.static-mode {
+  color: var(--amber-400);
+}
+
+/* O Switch em si (cápsula / pill track da imagem com paleta GeoMAC) */
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ios-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1.5px solid rgba(148, 163, 184, 0.35);
+  border-radius: 32px;
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.ios-slider::before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 2.5px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.35s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* Estado ligado (Direita - LM Studio em Verde GeoMAC) */
+.ios-switch input:checked + .ios-slider {
+  background: var(--green-500);
+  border-color: var(--green-400);
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.ios-switch input:checked + .ios-slider::before {
+  transform: translateX(27px);
+  background-color: #ffffff;
+}
+
+.ios-switch input:focus-visible + .ios-slider {
+  outline: 2px solid var(--green-400);
+  outline-offset: 3px;
+}
+
+/* Status indicator badge abaixo do toggle */
+.data-source-status-bar {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.data-source-status-bar .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.data-source-status-bar.live .status-dot {
+  background: var(--green-400);
+  box-shadow: 0 0 8px var(--green-400);
+}
+
+.data-source-status-bar.static .status-dot {
+  background: var(--amber-400);
+  box-shadow: 0 0 8px var(--amber-400);
+}
+
+/* ---- ESTILOS COMPARTILHADOS DE PÁGINAS DA LLM ---- */
+.assistant-layout {
+  padding: 100px 0 60px;
+  min-height: calc(100vh - 80px);
+}
+
+.assistant-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.assistant-header h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  margin-bottom: 12px;
+}
+
+.assistant-header h1 span {
+  background: var(--gradient-green);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.assistant-header p {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Quick Fill Action Bar */
+.quick-fill-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px dashed rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  margin-bottom: 24px;
+}
+
+.quick-fill-text {
+  font-size: 0.88rem;
+  color: var(--green-300);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quick-fill-btn {
+  background: var(--gradient-green);
+  color: #060b18;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  border-radius: 100px;
+  padding: 8px 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.quick-fill-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.5);
+  filter: brightness(1.1);
+}
+
+/* ---- FORMULÁRIO DE DIAGNÓSTICO AGRONÔMICO ---- */
+.diagnosis-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .diagnosis-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-fieldset-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--green-400);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-card);
+  padding-bottom: 8px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+}
+
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: var(--green-400);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.field-hint {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.btn-diagnose {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--gradient-green);
+  color: #04130a;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35);
+  margin-top: 10px;
+}
+
+.btn-diagnose:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.5);
+  filter: brightness(1.08);
+}
+
+.btn-diagnose:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+/* ---- PAINEL DE RESULTADO DO DIAGNÓSTICO ---- */
+.diagnosis-result-panel {
+  position: sticky;
+  top: 90px;
+}
+
+.result-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-muted);
+}
+
+.result-placeholder i {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  color: rgba(100, 116, 139, 0.3);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.risk-badge.critico, .risk-badge.alto {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--red-400);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.risk-badge.moderado, .risk-badge.medio {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-400);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.risk-badge.baixo {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--green-400);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.prob-meter-container {
+  margin-bottom: 20px;
+}
+
+.prob-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.prob-meter-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 100px;
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+}
+
+.prob-meter-fill {
+  height: 100%;
+  background: var(--gradient-red);
+  border-radius: 100px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.executive-summary-box {
+  background: rgba(15, 23, 42, 0.85);
+  border-left: 4px solid var(--green-400);
+  padding: 16px 18px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.limiting-factors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.factor-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.factor-card:hover {
+  border-color: var(--border-glow);
+  transform: translateX(3px);
+}
+
+.factor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.factor-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--green-400);
+}
+
+.factor-severity {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.factor-severity.alta, .factor-severity.critica, .factor-severity.alto, .factor-severity.critico {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--red-400);
+}
+
+.factor-severity.moderada, .factor-severity.media, .factor-severity.medio {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--amber-400);
+}
+
+.factor-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.recommendations-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recommendations-list li {
+  position: relative;
+  padding-left: 28px;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.recommendations-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  color: var(--green-400);
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+/* ---- INTERFACE DE CHAT AGRONÔMICO (agronomic-chat.html) ---- */
+.chat-container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 72vh;
+  min-height: 550px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.chat-context-bar {
+  padding: 14px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid var(--border-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.context-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.context-selector-wrapper label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--green-400);
+  white-space: nowrap;
+}
+
+.context-selector-wrapper select {
+  background: rgba(6, 11, 24, 0.8);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  max-width: 380px;
+}
+
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scroll-behavior: smooth;
+}
+
+/* Balões de Mensagem */
+.chat-bubble {
+  display: flex;
+  gap: 12px;
+  max-width: 82%;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-bubble.assistant {
+  align-self: flex-start;
+}
+
+.bubble-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chat-bubble.user .bubble-avatar {
+  background: var(--gradient-blue);
+  color: #fff;
+}
+
+.chat-bubble.assistant .bubble-avatar {
+  background: var(--gradient-green);
+  color: #060b18;
+}
+
+.bubble-content {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  padding: 14px 18px;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.chat-bubble.user .bubble-content {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(30, 41, 59, 0.85));
+  border-color: rgba(59, 130, 246, 0.4);
+  border-top-right-radius: 4px;
+}
+
+.chat-bubble.assistant .bubble-content {
+  border-top-left-radius: 4px;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.bubble-content p {
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.bubble-content p:last-child {
+  margin-bottom: 0;
+}
+
+.bubble-content ul, .bubble-content ol {
+  margin: 8px 0 8px 20px;
+  color: var(--text-primary);
+}
+
+.bubble-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bubble-meta .model-tag {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--green-300);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+}
+
+/* Sugestões Rápidas (Chips) */
+.quick-chips-wrapper {
+  padding: 10px 20px;
+  background: rgba(15, 23, 42, 0.6);
+  border-top: 1px solid rgba(100, 116, 139, 0.15);
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.chip-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.chip-btn:hover {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--green-400);
+  color: var(--text-heading);
+}
+
+/* Input Bar */
+.chat-input-bar {
+  padding: 16px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid var(--border-card);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.chat-input-bar input {
+  flex: 1;
+  padding: 14px 18px;
+  background: rgba(6, 11, 24, 0.85);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: all 0.25s ease;
+}
+
+.chat-input-bar input:focus {
+  outline: none;
+  border-color: var(--green-400);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-send {
+  background: var(--gradient-green);
+  color: #04130a;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 22px;
+  height: 48px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-send:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Indicador de Digitação (Typing Dots) */
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green-400);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.fa-spin-fast {
+  animation: spin 0.8s linear infinite;
+}

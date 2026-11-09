@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat com Agrônomo Virtual | FarmLab GeoMAC</title>
+
+  <!-- Estilos Globais e do Assistente -->
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../css/assistant.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .nav-user { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-secondary); }
+    .nav-user strong { color: var(--text-heading); font-weight: 600; }
+    .nav-logout {
+      font: inherit; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);
+      background: none; border: 1px solid rgba(100,116,139,.35); border-radius: 100px;
+      padding: 6px 14px; cursor: pointer; transition: color .2s, border-color .2s;
+    }
+    .nav-logout:hover { color: var(--green-400); border-color: var(--green-400); }
+    .nav-links li a.active {
+      color: var(--green-400);
+      border-bottom: 2px solid var(--green-400);
+      padding-bottom: 4px;
+    }
+    @media (max-width: 768px) {
+      .nav-user strong { display: none; }
+    }
+  </style>
+
+  <!-- Autenticação do FarmLab -->
+  <script src="../services/authService.js"></script>
+</head>
+<body>
+
+  <!-- NAVEGAÇÃO SUPERIOR -->
+  <nav class="nav scrolled">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <i class="fa-solid fa-leaf"></i>
+        Farm<span>Lab</span>
+      </div>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Visão Geral</a></li>
+          <li><a href="dashboard.html#diagnostico">Matriz de Risco</a></li>
+          <li><a href="agronomic-diagnosis.html">Diagnóstico IA</a></li>
+          <li><a href="agronomic-chat.html" class="active">Chat IA</a></li>
+        </ul>
+        <div class="nav-user">
+          <span><strong id="navUserName">Produtor Rural</strong></span>
+          <button type="button" class="nav-logout" onclick="FarmAuth.logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CORPO PRINCIPAL -->
+  <main class="container assistant-layout">
+    <header class="assistant-header">
+      <div class="hero-badge">
+        <i class="fa-solid fa-comments"></i> Assistente Conversacional de Campo
+      </div>
+      <h1>Engenheiro Agrônomo <span>Virtual</span></h1>
+      <p>
+        Consulte recomendações de calagem, gessagem, manejo fitossanitário e tomada de decisão agronômica orientada por IA (Qwen 2.5 7B Instruct).
+      </p>
+    </header>
+
+    <!-- COMPONENTE SOLICITADO: BOTÃO TIPO DE DADOS (PADRÃO DA IMAGEM + PALETA GEOMAC) -->
+    <section id="dataSourceToggleContainer" aria-label="Controle de Tipo de Dados"></section>
+
+    <!-- CONTAINER DA INTERFACE DE CHAT -->
+    <div class="chat-container">
+      
+      <!-- BARRA DE CONTEXTO DO TALHÃO -->
+      <div class="chat-context-bar">
+        <div class="context-selector-wrapper">
+          <label for="talhaoContextSelect"><i class="fa-solid fa-location-dot"></i> Contexto do Talhão:</label>
+          <select id="talhaoContextSelect">
+            <option value="Talhão Grão 4.0 (19.3 ha) — Milho DKB358PRO4, solo arenoso, pH CaCl2 4.65, Al 1.48 cmol, pico térmico 35.9°C, 0mm chuva">
+              Talhão Grão 4.0 (Safra 25/26 — Foco de Estresse)
+            </option>
+            <option value="Talhão Grão Convencional (21.5 ha) — Milho DKB358PRO4, solo corrigido, sem estresse térmico crítico">
+              Talhão Grão Convencional (Safra 25/26 — Testemunha)
+            </option>
+            <option value="Visão Geral da Propriedade / Toda a Fazenda">
+              Geral / Toda a Fazenda
+            </option>
+          </select>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-shield-halved" style="color: var(--green-400)"></i> Suporte Técnico
+        </div>
+      </div>
+
+      <!-- HISTÓRICO DE MENSAGENS -->
+      <div class="chat-history" id="chatHistory">
+        <!-- Mensagem de Boas-vindas Inicial -->
+        <div class="chat-bubble assistant">
+          <div class="bubble-avatar"><i class="fa-solid fa-leaf"></i></div>
+          <div class="bubble-content">
+            <p><strong>Olá! Sou o Engenheiro Agrônomo Virtual do GeoMAC.</strong></p>
+            <p>Estou pronto para analisar os atributos do solo, índices de vegetação (NDVI) e anomalias climáticas da sua safra.</p>
+            <p>Você pode selecionar o talhão no seletor acima, clicar em uma das perguntas rápidas ou digitar sua dúvida técnica abaixo!</p>
+            <div class="bubble-meta">
+              <span>GeoMAC Assistant</span>
+              <span class="model-tag">Pronto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUGESTÕES RÁPIDAS (CHIPS) -->
+      <div class="quick-chips-wrapper">
+        <button type="button" class="chip-btn" data-query="Como neutralizar os 1.48 cmol de alumínio no solo do Grão 4.0?">
+          <i class="fa-solid fa-bolt"></i> Como neutralizar o alumínio tóxico?
+        </button>
+        <button type="button" class="chip-btn" data-query="Qual estratégia de calagem e gessagem você recomenda para solo arenoso com pH 4.65?">
+          <i class="fa-solid fa-flask"></i> Calagem e gessagem recomendadas
+        </button>
+        <button type="button" class="chip-btn" data-query="Qual foi o impacto do veranico de 14 dias com 0mm de chuva e 35.9°C no pendoamento?">
+          <i class="fa-solid fa-temperature-arrow-up"></i> Impacto do veranico no milho
+        </button>
+        <button type="button" class="chip-btn" data-query="Como mitigar e controlar os danos por capivaras nas bordaduras da lavoura?">
+          <i class="fa-solid fa-paw"></i> Danos por capivaras nas bordaduras
+        </button>
+      </div>
+
+      <!-- BARRA DE ENTRADA DE MENSAGEM -->
+      <div class="chat-input-bar">
+        <input type="text" id="chatInput" placeholder="Pergunte ao Agrônomo Virtual sobre manejo, solo, clima ou produtividade..." autocomplete="off">
+        <button type="button" class="btn-send" id="btnSend">
+          <span>Enviar</span> <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="../config/apiConfig.js"></script>
+  <script src="../services/assistantService.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Atualiza nome do usuário logado se houver sessão
+      const user = FarmAuth.user();
+      if (user && user.name) {
+        document.getElementById('navUserName').textContent = user.name.split(' ')[0] + (user.farm ? ' · ' + user.farm : '');
+      }
+
+      // 2. Inicializa o botão de alternância Tipo de Dados (Padrão da Imagem + Paleta GeoMAC)
+      const toggleContainer = document.getElementById('dataSourceToggleContainer');
+      AssistantService.setupDataSourceToggle(toggleContainer, (currentMode) => {
+        console.log(`[GeoMAC Chat] Modo de dados alterado para: ${currentMode}`);
+      });
+
+      // 3. Elementos do Chat
+      const chatHistory = document.getElementById('chatHistory');
+      const chatInput = document.getElementById('chatInput');
+      const btnSend = document.getElementById('btnSend');
+      const talhaoSelect = document.getElementById('talhaoContextSelect');
+
+      // Helper para formatar Markdown simples (títulos, negrito, listas)
+      function formatMarkdown(text) {
+        if (!text) return '';
+        let html = text
+          .replace(/### (.*?)\n/g, '<h4 style="color:var(--green-300); margin: 8px 0 4px;">$1</h4>')
+          .replace(/## (.*?)\n/g, '<h3 style="color:var(--green-400); margin: 10px 0 6px;">$1</h3>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>');
+        return `<p>${html}</p>`;
+      }
+
+      // Adiciona bolha de mensagem ao histórico
+      function appendMessage(sender, text, meta) {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${sender}`;
+
+        const isUser = sender === 'user';
+        const avatarIcon = isUser ? 'fa-user' : 'fa-seedling';
+        const senderName = isUser ? (user?.name?.split(' ')[0] || 'Você') : 'Agrônomo Virtual';
+        const modelTag = meta || (isUser ? '' : 'Qwen 2.5 7B');
+
+        bubble.innerHTML = `
+          <div class="bubble-avatar"><i class="fa-solid ${avatarIcon}"></i></div>
+          <div class="bubble-content">
+            ${isUser ? `<p>${text.replace(/\n/g, '<br>')}</p>` : formatMarkdown(text)}
+            <div class="bubble-meta">
+              <span>${senderName}</span>
+              ${modelTag ? `<span class="model-tag">${modelTag}</span>` : ''}
+            </div>
+          </div>
+        `;
+
+        chatHistory.appendChild(bubble);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        return bubble;
+      }
+
+      // Adiciona bolha de "digitando..."
+      function appendTypingIndicator() {
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble assistant typing';
+        bubble.id = 'typingBubble';
+        bubble.innerHTML = `
+          <div class="bubble-avatar"><i class="fa-solid fa-seedling"></i></div>
+          <div class="bubble-content">
+            <span class="typing-indicator">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </span>
+            <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 6px;">Agrônomo analisando variáveis...</span>
+          </div>
+        `;
+        chatHistory.appendChild(bubble);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+      function removeTypingIndicator() {
+        const bubble = document.getElementById('typingBubble');
+        if (bubble) bubble.remove();
+      }
+
+      // Envio de mensagem
+      async function handleSend() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        const talhaoContext = talhaoSelect.value;
+        appendMessage('user', message);
+        chatInput.value = '';
+
+        btnSend.disabled = true;
+        chatInput.disabled = true;
+        appendTypingIndicator();
+
+        try {
+          const res = await AssistantService.sendChatMessage(message, talhaoContext);
+          removeTypingIndicator();
+          appendMessage('assistant', res.reply || 'Sem resposta.', res.model || (res._mode === 'static' ? 'Simulador Estático' : 'Qwen 2.5 7B'));
+        } catch (err) {
+          removeTypingIndicator();
+          appendMessage('assistant', `⚠️ **Não foi possível obter resposta da LLM:** ${err.message}\n\n*Dica: Você pode alternar para o botão **Dados Estáticos** no topo da tela para continuar testando mesmo com o LM Studio offline.*`, 'Erro de Comunicação');
+        } finally {
+          btnSend.disabled = false;
+          chatInput.disabled = false;
+          chatInput.focus();
+        }
+      }
+
+      btnSend.addEventListener('click', handleSend);
+
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      });
+
+      // Chips de perguntas rápidas
+      document.querySelectorAll('.chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          chatInput.value = btn.getAttribute('data-query');
+          chatInput.focus();
+          handleSend();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

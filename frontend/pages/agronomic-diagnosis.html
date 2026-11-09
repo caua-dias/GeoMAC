@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico com IA | FarmLab GeoMAC</title>
+
+  <!-- Estilos Globais e do Assistente -->
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../css/assistant.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .nav-user { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-secondary); }
+    .nav-user strong { color: var(--text-heading); font-weight: 600; }
+    .nav-logout {
+      font: inherit; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);
+      background: none; border: 1px solid rgba(100,116,139,.35); border-radius: 100px;
+      padding: 6px 14px; cursor: pointer; transition: color .2s, border-color .2s;
+    }
+    .nav-logout:hover { color: var(--green-400); border-color: var(--green-400); }
+    .nav-links li a.active {
+      color: var(--green-400);
+      border-bottom: 2px solid var(--green-400);
+      padding-bottom: 4px;
+    }
+    @media (max-width: 768px) {
+      .nav-user strong { display: none; }
+    }
+  </style>
+
+  <!-- Autenticação do FarmLab -->
+  <script src="../services/authService.js"></script>
+</head>
+<body>
+
+  <!-- NAVEGAÇÃO SUPERIOR -->
+  <nav class="nav scrolled">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <i class="fa-solid fa-leaf"></i>
+        Farm<span>Lab</span>
+      </div>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Visão Geral</a></li>
+          <li><a href="dashboard.html#diagnostico">Matriz de Risco</a></li>
+          <li><a href="agronomic-diagnosis.html" class="active">Diagnóstico IA</a></li>
+          <li><a href="agronomic-chat.html">Chat IA</a></li>
+        </ul>
+        <div class="nav-user">
+          <span><strong id="navUserName">Produtor Rural</strong></span>
+          <button type="button" class="nav-logout" onclick="FarmAuth.logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CORPO PRINCIPAL -->
+  <main class="container assistant-layout">
+    <header class="assistant-header">
+      <div class="hero-badge">
+        <i class="fa-solid fa-microchip"></i> Módulo de Inteligência Artificial (.NET + LLM)
+      </div>
+      <h1>Diagnóstico Agronômico <span>Estruturado via LLM</span></h1>
+      <p>
+        Avaliação em tempo real combinando curvas fenológicas de NDVI, restrições físico-químicas de solo e déficit termo-hídrico com inferência do modelo Qwen 2.5 7B.
+      </p>
+    </header>
+
+    <!-- COMPONENTE SOLICITADO: BOTÃO TIPO DE DADOS (PADRÃO DA IMAGEM + PALETA GEOMAC) -->
+    <section id="dataSourceToggleContainer" aria-label="Controle de Tipo de Dados"></section>
+
+    <!-- BARRA DE PREENCHIMENTO RÁPIDO COM DADOS REAIS -->
+    <div class="quick-fill-bar">
+      <div class="quick-fill-text">
+        <i class="fa-solid fa-seedling"></i>
+        <span>Deseja testar com as métricas do <strong>Talhão Grão 4.0</strong> (Safra 2025/2026)?</span>
+      </div>
+      <button type="button" class="quick-fill-btn" id="btnQuickFill">
+        <i class="fa-solid fa-bolt"></i> Preencher Dados do Grão 4.0
+      </button>
+    </div>
+
+    <!-- GRID: FORMULÁRIO DE ENTRADA & RESULTADO ESTRUTURADO -->
+    <div class="diagnosis-grid">
+      
+      <!-- COLUNA DA ESQUERDA: FORMULÁRIO -->
+      <section class="glass-card">
+        <h2 class="form-fieldset-title">
+          <i class="fa-solid fa-sliders"></i> Variáveis de Entrada do Talhão
+        </h2>
+        
+        <form id="diagnosisForm">
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="fieldName"><i class="fa-solid fa-tag"></i> Nome do Talhão *</label>
+              <input type="text" id="fieldName" name="fieldName" placeholder="Ex: Grão 4.0" required>
+            </div>
+            <div class="field-group">
+              <label for="cropName"><i class="fa-solid fa-wheat-awn"></i> Cultura / Híbrido</label>
+              <input type="text" id="cropName" name="cropName" placeholder="Ex: Milho DKB358PRO4">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="peakNdvi"><i class="fa-solid fa-chart-line"></i> NDVI de Pico</label>
+              <input type="number" step="0.001" id="peakNdvi" name="peakNdvi" placeholder="Ex: 0.827" min="0" max="1" required>
+              <span class="field-hint">Pico fenológico antes do estresse</span>
+            </div>
+            <div class="field-group">
+              <label for="finalNdvi"><i class="fa-solid fa-arrow-trend-down"></i> NDVI Final / Colapso</label>
+              <input type="number" step="0.001" id="finalNdvi" name="finalNdvi" placeholder="Ex: 0.507" min="0" max="1" required>
+              <span class="field-hint">Índice no fechamento do ciclo</span>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="minSoilPh"><i class="fa-solid fa-flask"></i> pH Mínimo do Solo (CaCl2)</label>
+              <input type="number" step="0.01" id="minSoilPh" name="minSoilPh" placeholder="Ex: 4.65" min="3" max="9" required>
+              <span class="field-hint">Abaixo de 5.0 indica acidez restritiva</span>
+            </div>
+            <div class="field-group">
+              <label for="exchangeableAluminum"><i class="fa-solid fa-atom"></i> Alumínio Trocável (cmol/dm³)</label>
+              <input type="number" step="0.01" id="exchangeableAluminum" name="exchangeableAluminum" placeholder="Ex: 1.48" min="0" required>
+              <span class="field-hint">Acima de 0.3 gera toxidez radicular</span>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="field-group">
+              <label for="precipitation"><i class="fa-solid fa-cloud-rain"></i> Chuva no Reprodutivo (mm)</label>
+              <input type="number" step="0.1" id="precipitation" name="reproductiveStagePrecipitationMm" placeholder="Ex: 0.0" min="0" required>
+              <span class="field-hint">Acumulado em estádio VT/R1</span>
+            </div>
+            <div class="field-group">
+              <label for="maxTemperature"><i class="fa-solid fa-temperature-high"></i> Temperatura Máxima (°C)</label>
+              <input type="number" step="0.1" id="maxTemperature" name="maxTemperatureCelsius" placeholder="Ex: 35.9" required>
+              <span class="field-hint">Pico térmico no florescimento</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="additionalNotes"><i class="fa-solid fa-clipboard-list"></i> Observações Técnicas Complementares</label>
+            <textarea id="additionalNotes" name="additionalNotes" rows="3" placeholder="Informações de textura do solo, presença de pragas ou danos de fauna..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-diagnose" id="btnSubmitDiagnose">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Diagnóstico com IA
+          </button>
+        </form>
+      </section>
+
+      <!-- COLUNA DA DIREITA: RESULTADO ESTRUTURADO -->
+      <section class="glass-card diagnosis-result-panel" id="diagnosisResultContainer">
+        <div class="result-placeholder" id="resultPlaceholder">
+          <i class="fa-solid fa-robot"></i>
+          <h3>Pronto para Diagnosticar</h3>
+          <p>Preencha os indicadores agronômicos ao lado ou use o botão de preenchimento rápido para processar o diagnóstico com a IA.</p>
+        </div>
+
+        <div id="resultContent" style="display: none;">
+          <div class="result-header">
+            <div>
+              <span class="section-label" id="resultMetaBadge"><i class="fa-solid fa-microscope"></i> Diagnóstico Concluído</span>
+              <h2 style="font-size: 1.35rem; margin-top: 6px;" id="resultFieldTitle">Talhão Grão 4.0</h2>
+            </div>
+            <div class="risk-badge critico" id="resultRiskBadge">Risco: Crítico</div>
+          </div>
+
+          <!-- Barra de Probabilidade -->
+          <div class="prob-meter-container">
+            <div class="prob-meter-labels">
+              <span><strong>Probabilidade de Quebra de Safra:</strong></span>
+              <strong id="probValueText" style="color: var(--red-400)">85%</strong>
+            </div>
+            <div class="prob-meter-bar">
+              <div class="prob-meter-fill" id="probBarFill" style="width: 85%;"></div>
+            </div>
+          </div>
+
+          <!-- Resumo Executivo -->
+          <div class="executive-summary-box">
+            <h4 style="margin-bottom: 6px; color: var(--green-300); font-size: 0.88rem; text-transform: uppercase;">
+              <i class="fa-solid fa-file-waveform"></i> Resumo Executivo da LLM
+            </h4>
+            <p id="resultExecutiveSummary" style="color: var(--text-primary); font-size: 0.9rem; line-height: 1.6;"></p>
+          </div>
+
+          <!-- Fatores Limitantes -->
+          <h4 style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-heading);">
+            <i class="fa-solid fa-triangle-exclamation" style="color: var(--amber-400)"></i> Fatores Limitantes Identificados
+          </h4>
+          <div class="limiting-factors-list" id="resultLimitingFactors"></div>
+
+          <!-- Recomendações de Manejo -->
+          <h4 style="margin-top: 20px; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-heading);">
+            <i class="fa-solid fa-clipboard-check" style="color: var(--green-400)"></i> Recomendações Prioritárias de Manejo
+          </h4>
+          <ul class="recommendations-list" id="resultRecommendations"></ul>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="../config/apiConfig.js"></script>
+  <script src="../services/assistantService.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Atualiza nome do usuário logado se houver sessão
+      const user = FarmAuth.user();
+      if (user && user.name) {
+        document.getElementById('navUserName').textContent = user.name.split(' ')[0] + (user.farm ? ' · ' + user.farm : '');
+      }
+
+      // 2. Inicializa o botão de alternância Tipo de Dados (Padrão da Imagem + Paleta GeoMAC)
+      const toggleContainer = document.getElementById('dataSourceToggleContainer');
+      AssistantService.setupDataSourceToggle(toggleContainer, (currentMode) => {
+        console.log(`[GeoMAC] Modo de dados alterado para: ${currentMode}`);
+      });
+
+      // 3. Botão de Preenchimento Rápido com métricas do Talhão Grão 4.0
+      const btnQuick = document.getElementById('btnQuickFill');
+      btnQuick.addEventListener('click', () => {
+        const s = AssistantService.SAMPLE_GRAO_40;
+        document.getElementById('fieldName').value = s.fieldName;
+        document.getElementById('cropName').value = s.cropName;
+        document.getElementById('peakNdvi').value = s.peakNdvi;
+        document.getElementById('finalNdvi').value = s.finalNdvi;
+        document.getElementById('minSoilPh').value = s.minSoilPh;
+        document.getElementById('exchangeableAluminum').value = s.exchangeableAluminum;
+        document.getElementById('precipitation').value = s.reproductiveStagePrecipitationMm;
+        document.getElementById('maxTemperature').value = s.maxTemperatureCelsius;
+        document.getElementById('additionalNotes').value = s.additionalNotes;
+      });
+
+      // 4. Submissão do Formulário de Diagnóstico
+      const form = document.getElementById('diagnosisForm');
+      const btnSubmit = document.getElementById('btnSubmitDiagnose');
+      const placeholder = document.getElementById('resultPlaceholder');
+      const content = document.getElementById('resultContent');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const payload = {
+          fieldName: document.getElementById('fieldName').value.trim(),
+          cropName: document.getElementById('cropName').value.trim(),
+          peakNdvi: parseFloat(document.getElementById('peakNdvi').value) || 0,
+          finalNdvi: parseFloat(document.getElementById('finalNdvi').value) || 0,
+          minSoilPh: parseFloat(document.getElementById('minSoilPh').value) || 0,
+          exchangeableAluminum: parseFloat(document.getElementById('exchangeableAluminum').value) || 0,
+          reproductiveStagePrecipitationMm: parseFloat(document.getElementById('precipitation').value) || 0,
+          maxTemperatureCelsius: parseFloat(document.getElementById('maxTemperature').value) || 0,
+          additionalNotes: document.getElementById('additionalNotes').value.trim()
+        };
+
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin-fast"></i> Processando com Inteligência Artificial...`;
+
+        try {
+          const res = await AssistantService.generateDiagnosis(payload);
+
+          // Renderiza o resultado na tela
+          placeholder.style.display = 'none';
+          content.style.display = 'block';
+
+          document.getElementById('resultFieldTitle').textContent = `Talhão: ${payload.fieldName}`;
+          
+          // Badge de Risco
+          const riskBadge = document.getElementById('resultRiskBadge');
+          const risk = res.overallRiskLevel || 'Crítico';
+          riskBadge.textContent = `Risco: ${risk}`;
+          riskBadge.className = 'risk-badge ' + risk.toLowerCase();
+
+          // Barra de probabilidade
+          const prob = res.yieldLossProbability || 0;
+          document.getElementById('probValueText').textContent = `${prob.toFixed(1)}%`;
+          document.getElementById('probBarFill').style.width = `${Math.min(100, Math.max(0, prob))}%`;
+
+          // Resumo Executivo
+          document.getElementById('resultExecutiveSummary').textContent = res.executiveSummary || 'Sem resumo disponível.';
+
+          // Fatores Limitantes
+          const factorsContainer = document.getElementById('resultLimitingFactors');
+          factorsContainer.innerHTML = '';
+          (res.limitingFactors || []).forEach(f => {
+            const card = document.createElement('div');
+            card.className = 'factor-card';
+            card.innerHTML = `
+              <div class="factor-header">
+                <span class="factor-category">${f.category || 'Agronomia'}</span>
+                <span class="factor-severity ${(f.severity || '').toLowerCase()}">${f.severity || 'Atenção'}</span>
+              </div>
+              <div class="factor-desc">${f.description || ''}</div>
+            `;
+            factorsContainer.appendChild(card);
+          });
+
+          // Recomendações
+          const recList = document.getElementById('resultRecommendations');
+          recList.innerHTML = '';
+          (res.recommendations || []).forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = r;
+            recList.appendChild(li);
+          });
+
+          // Scroll suave até o resultado se mobile
+          if (window.innerWidth < 992) {
+            content.scrollIntoView({ behavior: 'smooth' });
+          }
+
+        } catch (err) {
+          alert(`Erro ao processar diagnóstico: ${err.message}\n\nDica: Se o servidor LM Studio estiver fechado, ative o botão 'Dados Estáticos' no topo da página.`);
+        } finally {
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Diagnóstico com IA`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
